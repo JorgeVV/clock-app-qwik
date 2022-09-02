@@ -430,7 +430,7 @@ export const Time = (props: {
     );
 
   return (
-    <div class="flex flex-col space-b-4">
+    <h1 class="flex flex-col space-b-4">
       <div class="flex uppercase text-h4-thin space-i-4 tablet:text-h5 desktop:text-h4">
         <svg
           aria-hidden="true"
@@ -456,7 +456,7 @@ export const Time = (props: {
         </span>
       </time>
       <p class="font-bold uppercase text-h6 tablet:text-h5 desktop:text-h3">{location}</p>
-    </div>
+    </h1>
   );
 };
 
