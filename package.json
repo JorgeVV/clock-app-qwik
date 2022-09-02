@@ -2,6 +2,7 @@
   "name": "clock-app",
   "description": "File based routing and MDX support Vite.js tooling. Netlify Edge Functions. Prettier code formatter. Tailwind CSS framework.",
   "scripts": {
+    "postinstall": "patch-package",
     "build": "npm run typecheck && npm run build.client && npm run build.ssr",
     "build.client": "vite build",
     "build.ssr": "vite build --ssr src/entry.netlify.ts",
@@ -28,6 +29,7 @@
     "eslint": "8.22.0",
     "eslint-plugin-qwik": "0.0.107",
     "node-fetch": "3.2.10",
+    "patch-package": "^6.4.7",
     "postcss": "8.4.14",
     "postcss-hover-media-feature": "^1.0.2",
     "prettier": "2.7.1",

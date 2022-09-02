@@ -1,0 +1,14 @@
+diff --git a/node_modules/@builder.io/qwik-city/middleware/netlify-edge/index.mjs b/node_modules/@builder.io/qwik-city/middleware/netlify-edge/index.mjs
+index 2bc6822..13abaae 100644
+--- a/node_modules/@builder.io/qwik-city/middleware/netlify-edge/index.mjs
++++ b/node_modules/@builder.io/qwik-city/middleware/netlify-edge/index.mjs
+@@ -512,7 +512,8 @@ async function requestHandler(requestCtx, render, platform, opts) {
+ 
+ // packages/qwik-city/middleware/netlify-edge/index.ts
+ function qwikCity(render, opts) {
+-  async function onRequest(request, { next }) {
++  async function onRequest(request, { next, ip }) {
++    request.headers.set('X-Client-IP', ip)
+     try {
+       const requestCtx = {
+         url: new URL(request.url),
