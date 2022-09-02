@@ -374,7 +374,7 @@ export const Details = component$(
               </dt>
               <dd
                 class={clsx(
-                  "text-end text-h2-thin font-bold",
+                  "text-end text-h2-thin font-bold break-all",
                   "tablet:text-start tablet:text-h2-medium",
                   "desktop:text-h2"
                 )}
