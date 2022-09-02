@@ -1,8 +1,8 @@
 diff --git a/node_modules/@builder.io/qwik-city/middleware/netlify-edge/index.mjs b/node_modules/@builder.io/qwik-city/middleware/netlify-edge/index.mjs
-index 2bc6822..13abaae 100644
+index 9e5dc0f..cd8c47f 100644
 --- a/node_modules/@builder.io/qwik-city/middleware/netlify-edge/index.mjs
 +++ b/node_modules/@builder.io/qwik-city/middleware/netlify-edge/index.mjs
-@@ -512,7 +512,8 @@ async function requestHandler(requestCtx, render, platform, opts) {
+@@ -561,7 +561,8 @@ async function requestHandler(requestCtx, render, platform, opts) {
  
  // packages/qwik-city/middleware/netlify-edge/index.ts
  function qwikCity(render, opts) {
