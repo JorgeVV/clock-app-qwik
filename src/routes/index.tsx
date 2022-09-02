@@ -1,19 +1,16 @@
+import type { NoSerialize, Ref } from "@builder.io/qwik";
 import {
   component$,
   Fragment,
   noSerialize,
-  NoSerialize,
   Resource,
   useClientEffect$,
   useRef,
   useStore,
-  useWatch$,
+  useWatch$
 } from "@builder.io/qwik";
-import {
-  DocumentHead,
-  RequestHandler,
-  useEndpoint,
-} from "@builder.io/qwik-city";
+import type { DocumentHead, RequestHandler } from "@builder.io/qwik-city";
+import { useEndpoint } from "@builder.io/qwik-city";
 import clsx from "clsx";
 import { Flipper } from "flip-toolkit";
 import { promiseHash } from "remix-utils";
@@ -22,7 +19,7 @@ import {
   animateOpacity,
   clearKeysFromHtmlElement,
   getGreetingAndDaytime,
-  getIpAddressFromHeaders,
+  getIpAddressFromHeaders
 } from "../utils";
 
 export const backgroundImages = {
@@ -345,18 +342,11 @@ export const Main = component$((props: EndpointData) => {
           </div>
         </div>
         {detailsStore.isVisible && (
-          <div
-            ref={detailsContainerEl}
-            key="details"
-            class={clsx(
-              "backdrop-blur-lg backdrop-brightness-150",
-              timeStore.daytime === "day"
-                ? "bg-white/75 text-gray"
-                : "bg-black/75 text-white"
-            )}
-          >
-            <Details timeStore={timeStore} details={details} />
-          </div>
+          <Details
+            timeStore={timeStore}
+            details={details}
+            detailsRef={detailsContainerEl}
+          />
         )}
       </div>
     </main>
@@ -369,14 +359,21 @@ export const Details = component$(
     timeStore: {
       daytime: "day" | "night";
     };
+    detailsRef: Ref<HTMLElement>;
   }) => {
-    const { details, timeStore } = props;
+    const { details, timeStore, detailsRef } = props;
+
     return (
       <dl
+        ref={detailsRef}
+        key="details"
         class={clsx(
-          "grid grid-cols-1 items-center gap-y-4 is-full pli-6.5 plb-12",
+          "backdrop-blur-lg backdrop-brightness-150 grid grid-cols-1 items-center gap-y-4 is-full pli-6.5 plb-12",
           "tablet:grid-flow-col tablet:grid-cols-2 tablet:grid-rows-2 tablet:gap-x-10 tablet:plb-29 tablet:pis-16 tablet:gap-y-12",
-          "desktop:plb-18 desktop:pis-41 desktop:grid-cols-details desktop:gap-x-24 desktop:gap-y-12"
+          "desktop:plb-18 desktop:pis-41 desktop:grid-cols-details desktop:gap-x-24 desktop:gap-y-12",
+          timeStore.daytime === "day"
+            ? "bg-white/75 text-gray"
+            : "bg-black/75 text-white"
         )}
       >
         {details.map((field, i) => (
