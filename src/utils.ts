@@ -50,10 +50,10 @@ export function clearKeysFromHtmlElement(element: HTMLElement) {
 
 export function getIpAddressFromHeaders(headers: Headers) {
   let clientIpAddress =
-    headers.get("x-nf-client-connection-ip") ?? getClientIPAddress(headers);
+    headers.get("X-Nf-Client-Connection-Ip") ?? getClientIPAddress(headers);
 
   if (!clientIpAddress || clientIpAddress === "::1") {
-    clientIpAddress = "190.248.167.145";
+    clientIpAddress = "131.255.4.238";
   }
   return clientIpAddress;
 }
