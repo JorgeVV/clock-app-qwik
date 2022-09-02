@@ -20,6 +20,9 @@ module.exports = {
           transitionsProps.transform,
         ].join(","),
       },
+      gridTemplateColumns: {
+        details: "1fr min-content minmax(0, 1fr)",
+      },
     },
     colors: {
       black: "hsl(0, 0%, 0%)",
@@ -33,6 +36,10 @@ module.exports = {
       h1: [
         "calc(200rem/16)",
         { lineHeight: "calc(200rem/16)", letterSpacing: "calc(-5rem/16)" },
+      ],
+      'h1-middle': [
+        "calc(175rem/16)",
+        { lineHeight: "calc(175rem/16)", letterSpacing: "calc(-4.38rem/16)" },
       ],
       "h1-thin": [
         "calc(100rem/16)",

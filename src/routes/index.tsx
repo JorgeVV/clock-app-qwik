@@ -276,7 +276,8 @@ export const Main = component$((props: EndpointData) => {
             class={clsx(
               "flex flex-col items-start pbe-10 space-b-12 even:mbs-10 odd:mbs-auto",
               "tablet:pbe-16 tablet:space-b-20",
-              "tablet:pbe-24 desktop:flex-row desktop:items-end desktop:justify-between desktop:space-b-0"
+              "desktop:flex-row desktop:items-end desktop:justify-between desktop:space-b-0",
+              detailsStore.isVisible ? "desktop:pbe-14" : "desktop:pbe-24"
             )}
           >
             <Time
@@ -351,8 +352,8 @@ export const Details = component$(
       <dl
         class={clsx(
           "grid grid-cols-1 items-center gap-y-4 is-full pli-6.5 plb-12",
-          "tablet:grid-flow-col tablet:grid-cols-2 tablet:grid-rows-2 tablet:gap-x-10 tablet:plb-30 tablet:pis-16",
-          "desktop:plb-18 desktop:pis-41 desktop:grid-cols-3"
+          "tablet:grid-flow-col tablet:grid-cols-2 tablet:grid-rows-2 tablet:gap-x-10 tablet:plb-29 tablet:pis-16 tablet:gap-y-12",
+          "desktop:plb-18 desktop:pis-41 desktop:grid-cols-details desktop:gap-x-24 desktop:gap-y-12"
         )}
       >
         {details.map((field, i) => (
@@ -430,7 +431,7 @@ export const Time = (props: {
 
   return (
     <div class="flex flex-col space-b-4">
-      <div class="flex uppercase text-h4-thin space-i-4 tablet:text-h4">
+      <div class="flex uppercase text-h4-thin space-i-4 tablet:text-h5 desktop:text-h4">
         <svg
           aria-hidden="true"
           width="24"
@@ -446,7 +447,7 @@ export const Time = (props: {
         </span>
       </div>
       <time
-        class="flex items-baseline font-bold text-h1-thin space-i-2 tablet:text-h1"
+        class="flex items-baseline font-bold text-h1-thin space-i-2 tablet:text-h1-middle desktop:text-h1"
         dateTime={time}
       >
         <span>{time}</span>
@@ -454,7 +455,7 @@ export const Time = (props: {
           {abbreviation}
         </span>
       </time>
-      <p class="font-bold uppercase text-h6 tablet:text-h3">{location}</p>
+      <p class="font-bold uppercase text-h6 tablet:text-h5 desktop:text-h3">{location}</p>
     </div>
   );
 };
