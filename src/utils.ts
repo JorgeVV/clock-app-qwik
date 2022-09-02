@@ -48,10 +48,11 @@ export function clearKeysFromHtmlElement(element: HTMLElement) {
   }
 }
 
-export function getIpAddressFromHeaders(headers: Headers) {
-  let clientIpAddress = getClientIPAddress(headers);
+export function getIpAddressFromHeaders(headers: Headers, fallback?: string) {
+  let clientIpAddress = getClientIPAddress(headers) ?? fallback;
 
   if (!clientIpAddress || ["127.0.0.1", "::1"].includes(clientIpAddress)) {
+    console.warn('Using hardcoded IP')
     clientIpAddress = "66.203.113.173";
   }
 

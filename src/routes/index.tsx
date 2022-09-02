@@ -52,9 +52,13 @@ interface EndpointData {
   };
 }
 
-export const onGet: RequestHandler<EndpointData> = async ({ request, url }) => {
+export const onGet: RequestHandler<EndpointData> = async ({
+  request,
+  url,
+  platform,
+}) => {
   const showDetails = url.searchParams.get("showDetails") === "true";
-  const clientIpAddress = getIpAddressFromHeaders(request.headers);
+  const clientIpAddress = getIpAddressFromHeaders(request.headers, platform.ip);
   const { timeInfo, locationInfo, quote } = await promiseHash({
     timeInfo: getTimeInfo(clientIpAddress),
     locationInfo: getLocationInfo(clientIpAddress),
