@@ -7,7 +7,7 @@ import {
   useClientEffect$,
   useRef,
   useStore,
-  useWatch$
+  useWatch$,
 } from "@builder.io/qwik";
 import type { DocumentHead, RequestHandler } from "@builder.io/qwik-city";
 import { useEndpoint } from "@builder.io/qwik-city";
@@ -19,7 +19,7 @@ import {
   animateOpacity,
   clearKeysFromHtmlElement,
   getGreetingAndDaytime,
-  getIpAddressFromHeaders
+  getIpAddressFromHeaders,
 } from "../utils";
 
 export const backgroundImages = {
@@ -202,6 +202,9 @@ export const Main = component$((props: EndpointData) => {
         opacity: true,
         onAppear: (el) => animateOpacity(el, "in"),
         onExit(el, _index, removeElement) {
+          // Needs to clear qwik injected attributes because this element is
+          // already discarded by qwik but its diff algorithm gets confussed by
+          // its presence.
           clearKeysFromHtmlElement(el);
           el.setAttribute("aria-hidden", "true");
           // Disable button while transitioning
@@ -234,6 +237,9 @@ export const Main = component$((props: EndpointData) => {
             removeElement();
           }
 
+          // Needs to clear qwik injected attributes because this element is
+          // already discarded by qwik but its diff algorithm gets confussed by
+          // its presence.
           clearKeysFromHtmlElement(el);
           el.setAttribute("aria-hidden", "true");
           el.style.pointerEvents = "none";
