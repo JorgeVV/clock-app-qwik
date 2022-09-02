@@ -297,10 +297,11 @@ export const Main = component$((props: EndpointData) => {
             <form
               preventdefault:submit
               onSubmit$={() => {
+                detailsStore.isVisible = !detailsStore.isVisible;
                 const url = new URL(document.location.href);
                 url.searchParams.set(
                   "showDetails",
-                  `${!detailsStore.isVisible}`
+                  `${detailsStore.isVisible}`
                 );
                 history.replaceState(null, "", url);
               }}
@@ -315,9 +316,6 @@ export const Main = component$((props: EndpointData) => {
                   "group flex items-center rounded-full bg-white p-1 text-button-thin font-bold uppercase text-black/50 pis-4 space-i-4",
                   "tablet:p-2 tablet:text-button tablet:pis-7 tablet:space-i-3"
                 )}
-                onClick$={() => {
-                  detailsStore.isVisible = !detailsStore.isVisible;
-                }}
               >
                 <span class="min-is-[6ch]">
                   {detailsStore.isVisible ? "Less" : "More"}
