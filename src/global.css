@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    block-size: 100%;
+  }
+
+  input,
+  textarea,
+  button,
+  select,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  @font-face {
+    font-family: "Inter-fallback";
+    size-adjust: 107%;
+    ascent-override: 90%;
+    src: local("Arial");
+  }
+
+  /* inter-700 - latin */
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: local(""),
+      url("/assets/fonts/inter/inter-v12-latin-700.woff2") format("woff2"),
+      url("/assets/fonts/inter/inter-v12-latin-700.woff") format("woff");
+  }
+
+  /* inter-regular - latin */
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: local(""),
+      url("/assets/fonts/inter/inter-v12-latin-regular.woff2") format("woff2"),
+      url("/assets/fonts/inter/inter-v12-latin-regular.woff") format("woff");
+  }
+
+  /* inter-300 - latin */
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: local(""),
+      url("/assets/fonts/inter/inter-v12-latin-300.woff2") format("woff2"),
+      url("/assets/fonts/inter/inter-v12-latin-300.woff") format("woff");
+  }
+}
