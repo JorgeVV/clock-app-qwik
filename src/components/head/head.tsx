@@ -13,7 +13,7 @@ export const Head = component$(() => {
       href: `/assets/fonts/inter/inter-v12-latin-${fontWeight}.woff2`,
       as: "font",
       type: "font/woff2",
-      crossorigin: "anonymous",
+      crossorigin: "",
     })),
     ...head.links,
   ];
