@@ -551,9 +551,10 @@ export const BackgroundImage = (props: { daytime: "day" | "night" }) => {
         <img
           src={backgroundImages[daytime].mobile}
           alt=""
-          class="absolute inset-0 object-cover bs-full is-full"
+          class="absolute inset-0 object-cover"
           srcSet={`${backgroundImages[daytime].mobile} 375w`}
           sizes="100vw"
+          style={{ width: "100%", height: "100%" }}
           width={375}
           height={667}
         />
