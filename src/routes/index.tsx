@@ -238,7 +238,7 @@ export const Main = component$((props: EndpointData) => {
         },
         onExit(el, _index, removeElement, decisionData) {
           if (decisionData?.current?.reduceMotion) {
-            removeElement();
+            return removeElement();
           }
 
           // Needs to clear qwik injected attributes because this element is
