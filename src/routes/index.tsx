@@ -7,10 +7,13 @@ import {
   useClientEffect$,
   useRef,
   useStore,
-  useWatch$,
+  useWatch$
 } from "@builder.io/qwik";
-import type { DocumentHead, RequestHandler } from "@builder.io/qwik-city";
-import { useEndpoint } from "@builder.io/qwik-city";
+import {
+  DocumentHead,
+  RequestHandler,
+  useDocumentHead, useEndpoint
+} from "@builder.io/qwik-city";
 import clsx from "clsx";
 import { Flipper } from "flip-toolkit";
 import { promiseHash } from "remix-utils";
@@ -19,7 +22,7 @@ import {
   animateOpacity,
   clearKeysFromHtmlElement,
   getGreetingAndDaytime,
-  getIpAddressFromHeaders,
+  getIpAddressFromHeaders
 } from "../utils";
 
 export const backgroundImages = {
@@ -142,6 +145,7 @@ export const Main = component$((props: EndpointData) => {
   const detailsContainerEl = useRef<HTMLDivElement>();
   const parentContainerEl = useRef<HTMLDivElement>();
   const detailsStore = useStore({ isVisible: showDetails });
+  const documentHead = useDocumentHead();
 
   const timeStore = useStore({
     greeting: defaultGreeting,
@@ -162,6 +166,7 @@ export const Main = component$((props: EndpointData) => {
         timezone
       );
       Object.assign(timeStore, updatedValues);
+      documentHead.title = `Clock App - ${updatedValues.time} ${location}`;
     }, 1000);
 
     return () => clearInterval(timer);
@@ -316,6 +321,7 @@ export const Main = component$((props: EndpointData) => {
               <input
                 type="hidden"
                 name="showDetails"
+                required
                 value={`${!detailsStore.isVisible}`}
               />
               <button
@@ -564,9 +570,10 @@ export const BackgroundImage = (props: { daytime: "day" | "night" }) => {
 };
 
 export const head: DocumentHead<EndpointData> = ({ data }) => {
-  const { timeInfo } = data;
+  const { timeInfo, location } = data;
   const { daytime } = timeInfo;
   return {
+    title: `Clock App - ${timeInfo.time} ${location}`,
     links: [
       {
         rel: "preload",
