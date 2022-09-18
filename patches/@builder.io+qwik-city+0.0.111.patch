@@ -1,17 +1,17 @@
 diff --git a/node_modules/@builder.io/qwik-city/middleware/netlify-edge/index.mjs b/node_modules/@builder.io/qwik-city/middleware/netlify-edge/index.mjs
-index 6338515..213424f 100644
+index 6822cd3..b9434a0 100644
 --- a/node_modules/@builder.io/qwik-city/middleware/netlify-edge/index.mjs
 +++ b/node_modules/@builder.io/qwik-city/middleware/netlify-edge/index.mjs
-@@ -586,7 +586,7 @@ async function requestHandler(requestCtx, render, platform, opts) {
+@@ -591,7 +591,7 @@ async function requestHandler(requestCtx, render, platform, opts) {
  
  // packages/qwik-city/middleware/netlify-edge/index.ts
  function qwikCity(render, opts) {
 -  async function onRequest(request, { next }) {
-+  async function onRequest(request, { next, ...netlifyContext}) {
++  async function onRequest(request, { next, ...netlifyContext }) {
      try {
        const requestCtx = {
          url: new URL(request.url),
-@@ -620,13 +620,13 @@ function qwikCity(render, opts) {
+@@ -625,13 +625,13 @@ function qwikCity(render, opts) {
            });
          }
        };
