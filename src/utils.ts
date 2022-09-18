@@ -41,18 +41,11 @@ export function animateOpacity(
   });
 }
 
-export function clearKeysFromHtmlElement(element: HTMLElement) {
-  element.removeAttribute("q:key");
-  for (const symbol of Object.getOwnPropertySymbols(element)) {
-    delete element[symbol as unknown as keyof HTMLElement];
-  }
-}
-
 export function getIpAddressFromHeaders(headers: Headers, fallback?: string) {
   let clientIpAddress = getClientIPAddress(headers) ?? fallback;
 
   if (!clientIpAddress || ["127.0.0.1", "::1"].includes(clientIpAddress)) {
-    console.warn('Using hardcoded IP')
+    console.warn("Using hardcoded IP");
     clientIpAddress = "66.203.113.173";
   }
 

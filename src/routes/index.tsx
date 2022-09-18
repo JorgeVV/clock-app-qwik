@@ -7,12 +7,13 @@ import {
   useClientEffect$,
   useRef,
   useStore,
-  useWatch$
+  useWatch$,
 } from "@builder.io/qwik";
 import {
   DocumentHead,
   RequestHandler,
-  useDocumentHead, useEndpoint
+  useDocumentHead,
+  useEndpoint,
 } from "@builder.io/qwik-city";
 import clsx from "clsx";
 import { Flipper } from "flip-toolkit";
@@ -20,9 +21,8 @@ import { promiseHash } from "remix-utils";
 import { getLocationInfo, getQuote, getTimeInfo } from "../api";
 import {
   animateOpacity,
-  clearKeysFromHtmlElement,
   getGreetingAndDaytime,
-  getIpAddressFromHeaders
+  getIpAddressFromHeaders,
 } from "../utils";
 
 export const backgroundImages = {
@@ -211,10 +211,6 @@ export const Main = component$((props: EndpointData) => {
         opacity: true,
         onAppear: (el) => animateOpacity(el, "in"),
         onExit(el, _index, removeElement) {
-          // Needs to clear qwik injected attributes because this element is
-          // already discarded by qwik but its diff algorithm gets confussed by
-          // its presence.
-          clearKeysFromHtmlElement(el);
           el.setAttribute("aria-hidden", "true");
           // Disable button while transitioning
           const button = el.querySelector("button");
@@ -246,10 +242,6 @@ export const Main = component$((props: EndpointData) => {
             return removeElement();
           }
 
-          // Needs to clear qwik injected attributes because this element is
-          // already discarded by qwik but its diff algorithm gets confussed by
-          // its presence.
-          clearKeysFromHtmlElement(el);
           el.setAttribute("aria-hidden", "true");
           el.style.pointerEvents = "none";
           animateOpacity(el, "out", removeElement);
@@ -439,135 +431,141 @@ export const Details = component$(
   }
 );
 
-export const Time = (props: {
-  timeStore: {
-    time: string;
-    greeting: string;
-    daytime: "day" | "night";
-  };
-  abbreviation: string;
-  location: string;
-}) => {
-  const { abbreviation, location, timeStore } = props;
-  const { greeting, time, daytime } = timeStore;
-  const iconPath =
-    daytime === "day" ? (
-      <path
-        d="M11.78 19.417c.594 0 1.083.449 1.146 1.026l.006.125v1.842a1.152 1.152 0 01-2.296.125l-.007-.125v-1.842c0-.636.516-1.151 1.152-1.151zM6.382 17.18a1.15 1.15 0 01.09 1.527l-.09.1-1.302 1.303a1.152 1.152 0 01-1.718-1.528l.09-.1 1.302-1.302a1.15 1.15 0 011.628 0zm12.427 0l1.303 1.303a1.15 1.15 0 11-1.628 1.627L17.18 18.81a1.15 1.15 0 111.628-1.628zM11.781 5.879a5.908 5.908 0 015.901 5.902 5.908 5.908 0 01-5.901 5.902 5.908 5.908 0 01-5.902-5.902 5.908 5.908 0 015.902-5.902zm10.63 4.75a1.151 1.151 0 110 2.303h-1.843a1.151 1.151 0 110-2.303h1.842zm-19.418 0a1.151 1.151 0 01.126 2.296l-.125.007H1.15a1.151 1.151 0 01-.125-2.296l.125-.007h1.842zm1.985-7.268l.1.09 1.303 1.302a1.151 1.151 0 01-1.528 1.718l-.1-.09L3.45 5.08A1.15 1.15 0 014.978 3.36zm15.133.09c.45.449.45 1.178 0 1.628L18.808 6.38a1.151 1.151 0 11-1.628-1.628l1.303-1.303c.449-.449 1.178-.449 1.628 0zM11.781 0c.636 0 1.151.515 1.151 1.151v1.843a1.152 1.152 0 01-2.303 0V1.15C10.63.515 11.145 0 11.781 0z"
-        fill="#FFF"
-        fill-rule="nonzero"
-      />
-    ) : (
-      <path
-        d="M22.157 17.366a.802.802 0 00-.891-.248 8.463 8.463 0 01-2.866.482c-4.853 0-8.8-3.949-8.8-8.8a8.773 8.773 0 013.856-7.274.801.801 0 00-.334-1.454A7.766 7.766 0 0012 0C5.382 0 0 5.382 0 12s5.382 12 12 12c4.2 0 8.02-2.134 10.218-5.709a.805.805 0 00-.061-.925z"
-        fill="#FFF"
-        fill-rule="nonzero"
-      />
-    );
+export const Time = component$(
+  (props: {
+    timeStore: {
+      time: string;
+      greeting: string;
+      daytime: "day" | "night";
+    };
+    abbreviation: string;
+    location: string;
+  }) => {
+    const { abbreviation, location, timeStore } = props;
+    const { greeting, time, daytime } = timeStore;
+    const iconPath =
+      daytime === "day" ? (
+        <path
+          d="M11.78 19.417c.594 0 1.083.449 1.146 1.026l.006.125v1.842a1.152 1.152 0 01-2.296.125l-.007-.125v-1.842c0-.636.516-1.151 1.152-1.151zM6.382 17.18a1.15 1.15 0 01.09 1.527l-.09.1-1.302 1.303a1.152 1.152 0 01-1.718-1.528l.09-.1 1.302-1.302a1.15 1.15 0 011.628 0zm12.427 0l1.303 1.303a1.15 1.15 0 11-1.628 1.627L17.18 18.81a1.15 1.15 0 111.628-1.628zM11.781 5.879a5.908 5.908 0 015.901 5.902 5.908 5.908 0 01-5.901 5.902 5.908 5.908 0 01-5.902-5.902 5.908 5.908 0 015.902-5.902zm10.63 4.75a1.151 1.151 0 110 2.303h-1.843a1.151 1.151 0 110-2.303h1.842zm-19.418 0a1.151 1.151 0 01.126 2.296l-.125.007H1.15a1.151 1.151 0 01-.125-2.296l.125-.007h1.842zm1.985-7.268l.1.09 1.303 1.302a1.151 1.151 0 01-1.528 1.718l-.1-.09L3.45 5.08A1.15 1.15 0 014.978 3.36zm15.133.09c.45.449.45 1.178 0 1.628L18.808 6.38a1.151 1.151 0 11-1.628-1.628l1.303-1.303c.449-.449 1.178-.449 1.628 0zM11.781 0c.636 0 1.151.515 1.151 1.151v1.843a1.152 1.152 0 01-2.303 0V1.15C10.63.515 11.145 0 11.781 0z"
+          fill="#FFF"
+          fill-rule="nonzero"
+        />
+      ) : (
+        <path
+          d="M22.157 17.366a.802.802 0 00-.891-.248 8.463 8.463 0 01-2.866.482c-4.853 0-8.8-3.949-8.8-8.8a8.773 8.773 0 013.856-7.274.801.801 0 00-.334-1.454A7.766 7.766 0 0012 0C5.382 0 0 5.382 0 12s5.382 12 12 12c4.2 0 8.02-2.134 10.218-5.709a.805.805 0 00-.061-.925z"
+          fill="#FFF"
+          fill-rule="nonzero"
+        />
+      );
 
-  return (
-    <h1 class="flex flex-col space-b-4">
-      <div class="flex uppercase text-h4-thin space-i-4 tablet:text-h5 desktop:text-h4">
-        <svg
-          aria-hidden="true"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          {iconPath}
-        </svg>
-        <span>
-          {greeting}
-          <span class="sr-only tablet:not-sr-only">, it's currently</span>
-        </span>
-      </div>
-      <time
-        class="flex items-baseline font-bold text-h1-thin space-i-2 tablet:text-h1-middle desktop:text-h1"
-        dateTime={time}
-      >
-        <span>{time}</span>
-        <span class="font-light text-sub-thin tablet:text-sub">
-          {abbreviation}
-        </span>
-      </time>
-      <p class="font-bold uppercase text-h6 tablet:text-h5 desktop:text-h3">
-        {location}
-      </p>
-    </h1>
-  );
-};
-
-export const Quote = (props: { quote: { author: string; text: string } }) => {
-  const { quote } = props;
-  return (
-    <div class="flex items-start tablet:max-is-xl">
-      <figure class="shrink text-body-thin tablet:text-body">
-        <blockquote>
-          <p class="before:content-[open-quote] after:content-[close-quote]">
-            {quote.text}
-          </p>
-        </blockquote>
-        <cite class="inline-block not-italic font-bold mbs-2">
-          {quote.author}
-        </cite>
-      </figure>
-      <form class="shrink-0">
-        <button class="p-4 -m-4 -mis-0" type="submit">
-          <span class="sr-only">Refresh quote</span>
+    return (
+      <h1 class="flex flex-col space-b-4">
+        <div class="flex uppercase text-h4-thin space-i-4 tablet:text-h5 desktop:text-h4">
           <svg
             aria-hidden="true"
-            width="18"
-            height="18"
-            viewBox="0 0 18 18"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <path
-              d="M7.188 10.667a.208.208 0 01.147.355l-2.344 2.206a5.826 5.826 0 009.578-2.488l2.387.746A8.322 8.322 0 013.17 14.94l-2.149 2.022a.208.208 0 01-.355-.148v-6.148h6.52zm7.617-7.63L16.978.958a.208.208 0 01.355.146v6.23h-6.498a.208.208 0 01-.147-.356L13 4.765A5.825 5.825 0 003.43 7.26l-2.386-.746a8.32 8.32 0 0113.76-3.477z"
-              fill="#FFF"
-              fill-rule="nonzero"
-              opacity=".5"
-            />
+            {iconPath}
           </svg>
-        </button>
-      </form>
-    </div>
-  );
-};
+          <span>
+            {greeting}
+            <span class="sr-only tablet:not-sr-only">, it's currently</span>
+          </span>
+        </div>
+        <time
+          class="flex items-baseline font-bold text-h1-thin space-i-2 tablet:text-h1-middle desktop:text-h1"
+          dateTime={time}
+        >
+          <span>{time}</span>
+          <span class="font-light text-sub-thin tablet:text-sub">
+            {abbreviation}
+          </span>
+        </time>
+        <p class="font-bold uppercase text-h6 tablet:text-h5 desktop:text-h3">
+          {location}
+        </p>
+      </h1>
+    );
+  }
+);
 
-export const BackgroundImage = (props: { daytime: "day" | "night" }) => {
-  const { daytime } = props;
-  return (
-    <>
-      <picture>
-        <source
-          srcSet={`${backgroundImages[daytime].desktop} 1440w`}
-          media="(min-width: 1440px)"
-          sizes="100vw"
-          width={1440}
-          height={900}
-        />
-        <source
-          srcSet={`${backgroundImages[daytime].tablet} 768w`}
-          media="(min-width: 768px)"
-          sizes="100vw"
-          width={768}
-          height={1024}
-        />
-        <img
-          src={backgroundImages[daytime].mobile}
-          alt=""
-          class="absolute inset-0 object-cover bs-full is-full"
-          srcSet={`${backgroundImages[daytime].mobile} 375w`}
-          sizes="100vw"
-          width={375}
-          height={667}
-        />
-      </picture>
-      <div class="absolute inset-0 bg-black/40" />
-    </>
-  );
-};
+export const Quote = component$(
+  (props: { quote: { author: string; text: string } }) => {
+    const { quote } = props;
+    return (
+      <div class="flex items-start tablet:max-is-xl">
+        <figure class="shrink text-body-thin tablet:text-body">
+          <blockquote>
+            <p class="before:content-[open-quote] after:content-[close-quote]">
+              {quote.text}
+            </p>
+          </blockquote>
+          <cite class="inline-block not-italic font-bold mbs-2">
+            {quote.author}
+          </cite>
+        </figure>
+        <form class="shrink-0">
+          <button class="p-4 -m-4 -mis-0" type="submit">
+            <span class="sr-only">Refresh quote</span>
+            <svg
+              aria-hidden="true"
+              width="18"
+              height="18"
+              viewBox="0 0 18 18"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M7.188 10.667a.208.208 0 01.147.355l-2.344 2.206a5.826 5.826 0 009.578-2.488l2.387.746A8.322 8.322 0 013.17 14.94l-2.149 2.022a.208.208 0 01-.355-.148v-6.148h6.52zm7.617-7.63L16.978.958a.208.208 0 01.355.146v6.23h-6.498a.208.208 0 01-.147-.356L13 4.765A5.825 5.825 0 003.43 7.26l-2.386-.746a8.32 8.32 0 0113.76-3.477z"
+                fill="#FFF"
+                fill-rule="nonzero"
+                opacity=".5"
+              />
+            </svg>
+          </button>
+        </form>
+      </div>
+    );
+  }
+);
+
+export const BackgroundImage = component$(
+  (props: { daytime: "day" | "night" }) => {
+    const { daytime } = props;
+    return (
+      <>
+        <picture>
+          <source
+            srcSet={`${backgroundImages[daytime].desktop} 1440w`}
+            media="(min-width: 1440px)"
+            sizes="100vw"
+            width={1440}
+            height={900}
+          />
+          <source
+            srcSet={`${backgroundImages[daytime].tablet} 768w`}
+            media="(min-width: 768px)"
+            sizes="100vw"
+            width={768}
+            height={1024}
+          />
+          <img
+            src={backgroundImages[daytime].mobile}
+            alt=""
+            class="absolute inset-0 object-cover bs-full is-full"
+            srcSet={`${backgroundImages[daytime].mobile} 375w`}
+            sizes="100vw"
+            width={375}
+            height={667}
+          />
+        </picture>
+        <div class="absolute inset-0 bg-black/40" />
+      </>
+    );
+  }
+);
 
 export const head: DocumentHead<EndpointData> = ({ data }) => {
   const { timeInfo, location } = data;
