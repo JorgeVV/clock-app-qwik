@@ -41,7 +41,7 @@
     font-display: swap;
     src: local(""),
       url("./assets/fonts/inter/inter-v12-latin-regular.woff2") format("woff2"),
-      url("/assets/fonts/inter/inter-v12-latin-regular.woff") format("woff");
+      url("./assets/fonts/inter/inter-v12-latin-regular.woff") format("woff");
   }
 
   /* inter-300 - latin */
