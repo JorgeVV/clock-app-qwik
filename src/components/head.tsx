@@ -1,6 +1,9 @@
 import { component$ } from "@builder.io/qwik";
 import type { DocumentLink } from "@builder.io/qwik-city";
 import { useDocumentHead, useLocation } from "@builder.io/qwik-city";
+import inter300 from "../assets/fonts/inter/inter-v12-latin-300.woff2";
+import inter700 from "../assets/fonts/inter/inter-v12-latin-700.woff2";
+import interRegular from "../assets/fonts/inter/inter-v12-latin-regular.woff2";
 
 export const Head = component$(() => {
   const head = useDocumentHead();
@@ -8,9 +11,9 @@ export const Head = component$(() => {
 
   const links: Array<DocumentLink> = [
     { rel: "icon", href: "/favicon.png", type: "image/png" },
-    ...["700", "regular", "300"].map((fontWeight) => ({
+    ...[inter700, interRegular, inter300].map((font) => ({
       rel: "preload",
-      href: `/assets/fonts/inter/inter-v12-latin-${fontWeight}.woff2`,
+      href: font,
       as: "font",
       type: "font/woff2",
       crossorigin: "",

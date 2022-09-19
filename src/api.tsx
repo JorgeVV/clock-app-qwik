@@ -36,3 +36,20 @@ export async function getLocationInfo(clientIp: string) {
   const response = await fetch(`https://ipwho.is/${clientIp}`);
   return response.json() as Promise<LocationInfo>;
 }
+
+export interface EndpointData {
+  showDetails: boolean;
+  quote: {
+    id: string;
+    author: string;
+    text: string;
+  };
+  location: string;
+  greeting: string;
+  timeInfo: {
+    daytime: "day" | "night";
+    time: string;
+    abbreviation: string;
+    details: Array<{ key: string; label: string; value: string }>;
+  };
+}

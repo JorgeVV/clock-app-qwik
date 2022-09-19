@@ -1,4 +1,4 @@
-import { spring } from "flip-toolkit";
+import { Flipper, spring } from "flip-toolkit";
 import { getClientIPAddress } from "remix-utils";
 
 export function getGreetingAndDaytime(datetime: string, timeZone?: string) {
@@ -24,6 +24,25 @@ export function getGreetingAndDaytime(datetime: string, timeZone?: string) {
       : "Good evening";
 
   return { daytime, greeting, time };
+}
+
+export function createFlipper(element: HTMLElement) {
+  const flipper = new Flipper({
+    element,
+    handleEnterUpdateDelete({
+      animateEnteringElements,
+      animateExitingElements,
+      animateFlippedElements,
+      hideEnteringElements,
+    }) {
+      hideEnteringElements();
+      animateExitingElements();
+      animateEnteringElements();
+      animateFlippedElements();
+    },
+  });
+
+  return flipper;
 }
 
 export function animateOpacity(
