@@ -15,7 +15,6 @@ import {
   useEndpoint,
 } from "@builder.io/qwik-city";
 import { Flipper } from "flip-toolkit";
-import { promiseHash } from "remix-utils";
 import { EndpointData, getLocationInfo, getQuote, getTimeInfo } from "../api";
 import {
   BackgroundImage,
@@ -39,11 +38,11 @@ export const onGet: RequestHandler<EndpointData> = async ({
 }) => {
   const showDetails = url.searchParams.get("showDetails") === "true";
   const clientIpAddress = getIpAddressFromHeaders(request.headers, platform.ip);
-  const { timeInfo, locationInfo, quote } = await promiseHash({
-    timeInfo: getTimeInfo(clientIpAddress),
-    locationInfo: getLocationInfo(clientIpAddress),
-    quote: getQuote(),
-  });
+  const [timeInfo, locationInfo, quote] = await Promise.all([
+    getTimeInfo(clientIpAddress),
+    getLocationInfo(clientIpAddress),
+    getQuote(),
+  ]);
 
   const { daytime, greeting, time } = getGreetingAndDaytime(
     timeInfo.utc_datetime,
@@ -149,6 +148,7 @@ export const Main = component$((props: EndpointData) => {
     return () => clearInterval(timer);
   });
 
+  // Initialize Flipper
   useClientEffect$(() => {
     const flipper = createFlipper(parentContainerEl.current!);
 
@@ -165,6 +165,7 @@ export const Main = component$((props: EndpointData) => {
     flipperStore.flipper = noSerialize(flipper);
   });
 
+  // Set FLIP animation to Quote component
   useClientEffect$(({ track }) => {
     const quoteEl = track(quoteContainerEl, "current");
     if (flipperStore.flipper && quoteEl) {
@@ -186,6 +187,7 @@ export const Main = component$((props: EndpointData) => {
     }
   });
 
+  // Set FLIP animation to Details component
   useClientEffect$(({ track }) => {
     const detailsEl = track(detailsContainerEl, "current");
     if (flipperStore.flipper && detailsEl) {
