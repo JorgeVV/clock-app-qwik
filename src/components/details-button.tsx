@@ -1,5 +1,4 @@
 import { component$ } from "@builder.io/qwik";
-import clsx from "clsx";
 
 interface DetailsButtonProps {
   detailsStore: { isVisible: boolean };
@@ -24,20 +23,20 @@ export const DetailsButton = component$((props: DetailsButtonProps) => {
         value={`${!detailsStore.isVisible}`}
       />
       <button
-        class={clsx(
+        class={[
           "group flex items-center rounded-full bg-white p-1 text-button-thin font-bold uppercase text-black/50 pis-4 space-i-4",
-          "tablet:p-2 tablet:text-button tablet:pis-7 tablet:space-i-3"
-        )}
+          "tablet:p-2 tablet:text-button tablet:pis-7 tablet:space-i-3",
+        ]}
       >
         <span class="min-is-[6ch]">
           {detailsStore.isVisible ? "Less" : "More"}
         </span>
         <svg
-          class={clsx(
+          class={[
             "fill-current transform text-gray stroke-white transition-colors-transform duration-300 bs-8 is-8 group-hover:text-gray/50 group-active:text-gray/50",
-            detailsStore.isVisible && "rotate-180",
-            "tablet:bs-10 tablet:is-10"
-          )}
+            "tablet:bs-10 tablet:is-10",
+            detailsStore.isVisible ? "rotate-180" : "",
+          ].join(" ")}
           height={32}
           width={32}
           viewBox="0 0 40 40"

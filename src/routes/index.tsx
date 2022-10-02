@@ -14,7 +14,6 @@ import {
   useDocumentHead,
   useEndpoint,
 } from "@builder.io/qwik-city";
-import clsx from "clsx";
 import { Flipper } from "flip-toolkit";
 import { promiseHash } from "remix-utils";
 import { EndpointData, getLocationInfo, getQuote, getTimeInfo } from "../api";
@@ -236,12 +235,12 @@ export const Main = component$((props: EndpointData) => {
         class="relative bs-full is-full flex flex-col overflow-y-auto"
       >
         <div
-          class={clsx(
+          class={[
             "flex flex-col justify-start bs-full pli-6.5 flex-1",
             "tablet:pli-16",
             "desktop:pli-40",
-            "pbs-8 tablet:pbs-20 desktop:pbs-14"
-          )}
+            "pbs-8 tablet:pbs-20 desktop:pbs-14",
+          ]}
         >
           {!detailsStore.isVisible && (
             <div ref={quoteContainerEl} key="quote" class="mbe-auto">
@@ -251,12 +250,12 @@ export const Main = component$((props: EndpointData) => {
           <div
             ref={timeContainerEl}
             key="time"
-            class={clsx(
+            class={[
               "flex flex-col items-start pbe-10 space-b-12 even:mbs-10 odd:mbs-auto",
               "tablet:pbe-16 tablet:space-b-20",
               "desktop:flex-row desktop:items-end desktop:justify-between desktop:space-b-0",
-              detailsStore.isVisible ? "desktop:pbe-14" : "desktop:pbe-24"
-            )}
+              detailsStore.isVisible ? "desktop:pbe-14" : "desktop:pbe-24",
+            ]}
           >
             <Time
               abbreviation={abbreviation}
