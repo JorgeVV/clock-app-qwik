@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
+    "allowJs": true,
     "target": "ES2017",
     "module": "ES2020",
-    "lib": ["es2020", "DOM"],
+    "lib": ["es2020", "DOM", "WebWorker", "DOM.Iterable"],
     "jsx": "react-jsx",
     "jsxImportSource": "@builder.io/qwik",
     "strict": true,
@@ -11,7 +12,11 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "incremental": true,
-    "types": ["vite/client"]
+    "isolatedModules": true,
+    "types": ["node", "vite/client"],
+    "paths": {
+      "~/*": ["./src/*"]
+    }
   },
-  "include": ["src", "**/*.cjs", "**/.*.cjs"]
+  "include": ["src"]
 }

@@ -1,10 +1,10 @@
 import { component$ } from "@builder.io/qwik";
-import bgDesktopDaytime from "../assets/desktop/bg-image-daytime.webp";
-import bgDesktopNighttime from "../assets/desktop/bg-image-nighttime.webp";
-import bgMobileDaytime from "../assets/mobile/bg-image-daytime.webp";
-import bgMobileNighttime from "../assets/mobile/bg-image-nighttime.webp";
-import bgTabletDaytime from "../assets/tablet/bg-image-daytime.webp";
-import bgTabletNighttime from "../assets/tablet/bg-image-nighttime.webp";
+import bgDesktopDaytime from "~/assets/desktop/bg-image-daytime.webp";
+import bgDesktopNighttime from "~/assets/desktop/bg-image-nighttime.webp";
+import bgMobileDaytime from "~/assets/mobile/bg-image-daytime.webp";
+import bgMobileNighttime from "~/assets/mobile/bg-image-nighttime.webp";
+import bgTabletDaytime from "~/assets/tablet/bg-image-daytime.webp";
+import bgTabletNighttime from "~/assets/tablet/bg-image-nighttime.webp";
 
 export const backgroundImages = {
   day: {

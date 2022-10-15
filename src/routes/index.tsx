@@ -1,11 +1,10 @@
-import type { NoSerialize } from "@builder.io/qwik";
 import {
   component$,
+  NoSerialize,
   noSerialize,
   Resource,
   useClientEffect$,
-  useRef,
-  useStore,
+  useSignal,
   useWatch$,
 } from "@builder.io/qwik";
 import {
@@ -15,21 +14,21 @@ import {
   useEndpoint,
 } from "@builder.io/qwik-city";
 import { Flipper } from "flip-toolkit";
-import { EndpointData, getLocationInfo, getQuote, getTimeInfo } from "../api";
+import { EndpointData, getLocationInfo, getQuote, getTimeInfo } from "~/api";
 import {
   BackgroundImage,
   backgroundImages,
-} from "../components/background-image";
-import { Details } from "../components/details";
-import { DetailsButton } from "../components/details-button";
-import { Quote } from "../components/quote";
-import { Time } from "../components/time";
+} from "~/components/background-image";
+import { Details } from "~/components/details";
+import { DetailsButton } from "~/components/details-button";
+import { Quote } from "~/components/quote";
+import { Time } from "~/components/time";
 import {
   animateOpacity,
   createFlipper,
   getGreetingAndDaytime,
   getIpAddressFromHeaders,
-} from "../utils";
+} from "~/utils";
 
 export const onGet: RequestHandler<EndpointData> = async ({
   request,
@@ -37,7 +36,10 @@ export const onGet: RequestHandler<EndpointData> = async ({
   platform,
 }) => {
   const showDetails = url.searchParams.get("showDetails") === "true";
-  const clientIpAddress = getIpAddressFromHeaders(request.headers, platform.ip);
+  const clientIpAddress = getIpAddressFromHeaders(
+    request.headers,
+    (platform as any).ip
+  );
   const [timeInfo, locationInfo, quote] = await Promise.all([
     getTimeInfo(clientIpAddress),
     getLocationInfo(clientIpAddress),
@@ -106,43 +108,38 @@ export const Main = component$((props: EndpointData) => {
   const {
     timeInfo,
     quote,
-    greeting: defaultGreeting,
+    greeting: initialGreeting,
     location,
     showDetails,
   } = props;
   const {
-    daytime: defaultDayTime,
-    time: defaultTime,
+    daytime: initialDayTime,
+    time: initialTime,
     abbreviation,
     details,
   } = timeInfo;
-  const quoteContainerEl = useRef<HTMLDivElement>();
-  const timeContainerEl = useRef<HTMLDivElement>();
-  const detailsContainerEl = useRef<HTMLDivElement>();
-  const parentContainerEl = useRef<HTMLDivElement>();
-  const detailsStore = useStore({ isVisible: showDetails });
+  const quoteContainerEl = useSignal<HTMLDivElement>();
+  const timeContainerEl = useSignal<HTMLDivElement>();
+  const detailsContainerEl = useSignal<HTMLDivElement>();
+  const parentContainerEl = useSignal<HTMLDivElement>();
+  const isDetailsVisible = useSignal(showDetails);
+  const greeting = useSignal(initialGreeting);
+  const daytime = useSignal(initialDayTime);
+  const time = useSignal(initialTime);
   const documentHead = useDocumentHead();
 
-  const timeStore = useStore({
-    greeting: defaultGreeting,
-    daytime: defaultDayTime,
-    time: defaultTime,
-  });
-
-  const flipperStore = useStore<{ flipper: NoSerialize<Flipper> }>({
-    flipper: undefined,
-  });
+  const flipper = useSignal<NoSerialize<Flipper>>();
 
   useClientEffect$(() => {
     const timer = setInterval(() => {
       const currentDate = new Date();
       const timezone = details.find(({ key }) => key === "timezone")?.value;
-      const updatedValues = getGreetingAndDaytime(
-        currentDate.toISOString(),
-        timezone
-      );
-      Object.assign(timeStore, updatedValues);
-      documentHead.title = `Clock App - ${updatedValues.time} ${location}`;
+      ({
+        greeting: greeting.value,
+        time: time.value,
+        daytime: daytime.value,
+      } = getGreetingAndDaytime(currentDate.toISOString(), timezone));
+      documentHead.title = `Clock App - ${time.value} ${location}`;
     }, 1000);
 
     return () => clearInterval(timer);
@@ -150,10 +147,10 @@ export const Main = component$((props: EndpointData) => {
 
   // Initialize Flipper
   useClientEffect$(() => {
-    const flipper = createFlipper(parentContainerEl.current!);
+    const instance = createFlipper(parentContainerEl.value!);
 
-    flipper.addFlipped({
-      element: timeContainerEl.current!,
+    instance.addFlipped({
+      element: timeContainerEl.value!,
       flipId: "time",
       children: undefined,
       translate: true,
@@ -162,14 +159,14 @@ export const Main = component$((props: EndpointData) => {
       },
     });
 
-    flipperStore.flipper = noSerialize(flipper);
+    flipper.value = noSerialize(instance);
   });
 
   // Set FLIP animation to Quote component
   useClientEffect$(({ track }) => {
-    const quoteEl = track(quoteContainerEl, "current");
-    if (flipperStore.flipper && quoteEl) {
-      flipperStore.flipper.addFlipped({
+    const quoteEl = track(() => quoteContainerEl.value);
+    if (flipper.value && quoteEl) {
+      flipper.value.addFlipped({
         element: quoteEl,
         flipId: "quote",
         children: undefined,
@@ -189,9 +186,9 @@ export const Main = component$((props: EndpointData) => {
 
   // Set FLIP animation to Details component
   useClientEffect$(({ track }) => {
-    const detailsEl = track(detailsContainerEl, "current");
-    if (flipperStore.flipper && detailsEl) {
-      flipperStore.flipper.addFlipped({
+    const detailsEl = track(() => detailsContainerEl.value);
+    if (flipper.value && detailsEl) {
+      flipper.value.addFlipped({
         element: detailsEl,
         flipId: "details",
         children: undefined,
@@ -217,21 +214,19 @@ export const Main = component$((props: EndpointData) => {
   });
 
   useWatch$(({ track }) => {
-    track(detailsStore, "isVisible");
-    flipperStore.flipper?.recordBeforeUpdate();
+    track(() => isDetailsVisible.value);
+    flipper.value?.recordBeforeUpdate();
   });
 
   useClientEffect$(({ track }) => {
-    track(detailsStore, "isVisible");
+    track(() => isDetailsVisible.value);
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    flipperStore.flipper?.update(undefined, {
-      reduceMotion: mediaQuery.matches,
-    });
+    flipper.value?.update(null, { reduceMotion: mediaQuery.matches });
   });
 
   return (
     <main class="relative text-white bs-full is-full">
-      <BackgroundImage daytime={timeStore.daytime} />
+      <BackgroundImage daytime={daytime.value} />
       <div
         ref={parentContainerEl}
         class="relative bs-full is-full flex flex-col overflow-y-auto"
@@ -244,7 +239,7 @@ export const Main = component$((props: EndpointData) => {
             "pbs-8 tablet:pbs-20 desktop:pbs-14",
           ]}
         >
-          {!detailsStore.isVisible && (
+          {!isDetailsVisible.value && (
             <div ref={quoteContainerEl} key="quote" class="mbe-auto">
               <Quote quote={quote} />
             </div>
@@ -256,20 +251,22 @@ export const Main = component$((props: EndpointData) => {
               "flex flex-col items-start pbe-10 space-b-12 even:mbs-10 odd:mbs-auto",
               "tablet:pbe-16 tablet:space-b-20",
               "desktop:flex-row desktop:items-end desktop:justify-between desktop:space-b-0",
-              detailsStore.isVisible ? "desktop:pbe-14" : "desktop:pbe-24",
+              isDetailsVisible.value ? "desktop:pbe-14" : "desktop:pbe-24",
             ]}
           >
             <Time
               abbreviation={abbreviation}
               location={location}
-              timeStore={timeStore}
+              time={time.value}
+              daytime={daytime.value}
+              greeting={greeting.value}
             />
-            <DetailsButton detailsStore={detailsStore} />
+            <DetailsButton isDetailsVisible={isDetailsVisible} />
           </div>
         </div>
-        {detailsStore.isVisible && (
+        {isDetailsVisible.value && (
           <Details
-            timeStore={timeStore}
+            daytime={daytime.value}
             details={details}
             detailsRef={detailsContainerEl}
           />

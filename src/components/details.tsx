@@ -1,16 +1,14 @@
-import { component$, Fragment, Ref } from "@builder.io/qwik";
-import { EndpointData } from "../api";
+import { component$, Fragment, Signal } from "@builder.io/qwik";
+import { EndpointData } from "~/api";
 
 export interface DetailsProps {
   details: EndpointData["timeInfo"]["details"];
-  timeStore: {
-    daytime: "day" | "night";
-  };
-  detailsRef: Ref<HTMLElement>;
+  daytime: "day" | "night";
+  detailsRef: Signal<HTMLElement | undefined>;
 }
 
 export const Details = component$((props: DetailsProps) => {
-  const { details, timeStore, detailsRef } = props;
+  const { details, daytime, detailsRef } = props;
 
   return (
     <dl
@@ -20,9 +18,7 @@ export const Details = component$((props: DetailsProps) => {
         "backdrop-blur-lg backdrop-brightness-150 grid grid-cols-1 items-center gap-y-4 is-full pli-6.5 plb-12",
         "tablet:grid-flow-col tablet:grid-cols-2 tablet:grid-rows-2 tablet:gap-x-10 tablet:plb-29 tablet:pis-16 tablet:gap-y-12",
         "desktop:plb-18 desktop:pis-41 desktop:grid-cols-details desktop:gap-x-24 desktop:gap-y-12",
-        timeStore.daytime === "day"
-          ? "bg-white/75 text-gray"
-          : "bg-black/75 text-white",
+        daytime === "day" ? "bg-white/75 text-gray" : "bg-black/75 text-white",
       ]}
     >
       {details.map((field, i) => (
@@ -60,10 +56,7 @@ export const Details = component$((props: DetailsProps) => {
               <div
                 class={[
                   "bs-full is-px",
-                  {
-                    day: "bg-gray/25",
-                    night: "bg-white/25",
-                  }[timeStore.daytime],
+                  { day: "bg-gray/25", night: "bg-white/25" }[daytime],
                 ]}
               />
             </div>

@@ -1,9 +1,9 @@
 import { component$ } from "@builder.io/qwik";
 import type { DocumentLink } from "@builder.io/qwik-city";
 import { useDocumentHead, useLocation } from "@builder.io/qwik-city";
-import inter300 from "../assets/fonts/inter/inter-v12-latin-300.woff2";
-import inter700 from "../assets/fonts/inter/inter-v12-latin-700.woff2";
-import interRegular from "../assets/fonts/inter/inter-v12-latin-regular.woff2";
+import inter300 from "~/assets/fonts/inter/inter-v12-latin-300.woff2";
+import inter700 from "~/assets/fonts/inter/inter-v12-latin-700.woff2";
+import interRegular from "~/assets/fonts/inter/inter-v12-latin-regular.woff2";
 
 export const Head = component$(() => {
   const head = useDocumentHead();

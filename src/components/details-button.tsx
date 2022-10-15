@@ -1,18 +1,18 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, Signal } from "@builder.io/qwik";
 
 interface DetailsButtonProps {
-  detailsStore: { isVisible: boolean };
+  isDetailsVisible: Signal<boolean>;
 }
 
 export const DetailsButton = component$((props: DetailsButtonProps) => {
-  const { detailsStore } = props;
+  const { isDetailsVisible } = props;
   return (
     <form
       preventdefault:submit
       onSubmit$={() => {
-        detailsStore.isVisible = !detailsStore.isVisible;
+        isDetailsVisible.value = !isDetailsVisible.value;
         const url = new URL(document.location.href);
-        url.searchParams.set("showDetails", `${detailsStore.isVisible}`);
+        url.searchParams.set("showDetails", `${isDetailsVisible.value}`);
         history.replaceState(null, "", url);
       }}
     >
@@ -20,7 +20,7 @@ export const DetailsButton = component$((props: DetailsButtonProps) => {
         type="hidden"
         name="showDetails"
         required
-        value={`${!detailsStore.isVisible}`}
+        value={`${!isDetailsVisible.value}`}
       />
       <button
         class={[
@@ -29,13 +29,13 @@ export const DetailsButton = component$((props: DetailsButtonProps) => {
         ]}
       >
         <span class="min-is-[6ch]">
-          {detailsStore.isVisible ? "Less" : "More"}
+          {isDetailsVisible.value ? "Less" : "More"}
         </span>
         <svg
           class={[
             "fill-current transform text-gray stroke-white transition-colors-transform duration-300 bs-8 is-8 group-hover:text-gray/50 group-active:text-gray/50",
             "tablet:bs-10 tablet:is-10",
-            detailsStore.isVisible ? "rotate-180" : "",
+            isDetailsVisible.value ? "rotate-180" : "",
           ].join(" ")}
           height={32}
           width={32}

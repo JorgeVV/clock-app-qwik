@@ -1,17 +1,21 @@
-import { defineConfig } from 'vite';
-import { qwikVite } from '@builder.io/qwik/optimizer';
-import { qwikCity } from '@builder.io/qwik-city/vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import netlifyEdge from '@netlify/vite-plugin-netlify-edge';
+import { qwikCity } from "@builder.io/qwik-city/vite";
+import { qwikVite } from "@builder.io/qwik/optimizer";
+import netlifyEdge from "@netlify/vite-plugin-netlify-edge";
+import { defineConfig } from "vite";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig(() => {
   return {
-    
+    build: {
+      assetsInlineLimit: 600,
+    },
     plugins: [
       qwikCity(),
-      qwikVite({ ssr: { outDir: 'netlify/edge-functions/entry.netlify' } }),
+      qwikVite({
+        ssr: { outDir: "netlify/edge-functions/entry.netlify-edge" },
+      }),
       tsconfigPaths(),
-      netlifyEdge({ functionName: 'entry.netlify' }),
+      netlifyEdge({ functionName: "entry.netlify-edge" }),
     ],
   };
 });
